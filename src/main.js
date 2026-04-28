@@ -5,6 +5,7 @@ import App from './App.vue'
 import router from '@/router'
 import '@/assets/styles/base.css'
 import '@/assets/styles/main.css'
+import '@/assets/styles/theme-beautify.css'
 import { Loading } from '@element-plus/icons-vue'
 
 const app = createApp(App)

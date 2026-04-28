@@ -751,4 +751,44 @@ export default {
   padding: 10px;
   line-height: 1.8;
 }
+
+.main {
+  padding: 20px 0 30px;
+}
+
+.userBox {
+  border: 1px solid #e6ecf7;
+  border-radius: 16px;
+  box-shadow: 0 14px 35px rgba(32, 54, 110, 0.1);
+}
+
+.user_l h3 {
+  color: #1f2a44;
+  font-weight: 600;
+}
+
+.s_input {
+  border: 1px solid #d8e2f3;
+  border-radius: 10px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.s_input:focus {
+  border-color: #5a7cff;
+  box-shadow: 0 0 0 3px rgba(90, 124, 255, 0.15);
+}
+
+.code_pic {
+  border-radius: 10px;
+  border: 1px solid #e2e9f5;
+}
+
+.user_l .btn_red,
+.btn_ora_white {
+  border-radius: 10px;
+}
+
+.user_r {
+  border-left: 1px solid #edf1f8;
+}
 </style>

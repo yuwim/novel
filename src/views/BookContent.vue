@@ -1194,4 +1194,52 @@ body,
 .dqye {
   font-size: 15px;
 }
+
+#showDetail {
+  padding-bottom: 20px;
+}
+
+.readMain {
+  width: 980px;
+}
+
+.menu_left,
+.menu_right {
+  backdrop-filter: blur(8px);
+}
+
+.read_menu li,
+.read_menu li a {
+  border-radius: 10px;
+}
+
+.textbox {
+  border: 1px solid rgba(120, 143, 196, 0.2);
+  border-radius: 14px;
+  box-shadow: 0 14px 30px rgba(25, 43, 90, 0.12);
+}
+
+.book_title h1 {
+  color: #1f2a44;
+}
+
+.textinfo {
+  color: #5d6b8d;
+}
+
+.readBox {
+  color: #2b3653;
+  font-size: 18px;
+  line-height: 2.1;
+}
+
+.nextPageBox a {
+  border-radius: 12px;
+  border: 1px solid rgba(106, 126, 178, 0.25);
+  transition: all 0.2s ease;
+}
+
+.nextPageBox a:hover {
+  background: rgba(90, 124, 255, 0.12);
+}
 </style>

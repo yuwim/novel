@@ -180,4 +180,35 @@ export default {
 .el-pagination {
   --el-pagination-hover-color: #f80 !important;
 }
+
+.channelRankingContent .wrap_bg,
+.channelRankingContent .wrap_inner {
+  border-radius: 14px;
+  border: 1px solid #e8edf6;
+  box-shadow: 0 10px 24px rgba(28, 47, 97, 0.08);
+}
+
+.book_tit {
+  margin-bottom: 6px;
+}
+
+.rankTable th {
+  background: #f5f8ff;
+}
+
+.rankTable tr:hover td {
+  background: #f8faff;
+}
+
+.rightList2 li a {
+  border-radius: 8px;
+  margin-bottom: 6px;
+  transition: all 0.2s ease;
+}
+
+.rightList2 li a.on,
+.rightList2 li a:hover {
+  background: #edf2ff;
+  color: #4f6dff;
+}
 </style>

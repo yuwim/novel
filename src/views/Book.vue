@@ -304,7 +304,7 @@
                     /></a>
                   </div>
                   <div class="dec">
-                    <a href="javascript:void(0)" @click="bookDetail(item.id)">{{
+                    <a class="book_name" href="javascript:void(0)" @click="bookDetail(item.id)">{{
                       item.bookName
                     }}</a>
                     <a
@@ -527,5 +527,110 @@ export default {
 
 .el-button {
   --el-button-hover-bg-color: #ff880061;
+}
+
+.channelBookInfo {
+  border-radius: 16px;
+}
+
+.bookCover .book_cover {
+  border-radius: 12px;
+}
+
+.book_info .tit h1 {
+  color: #1f2a44;
+}
+
+.book_info .author {
+  color: #637094;
+}
+
+.book_info .list li {
+  color: #4a5878;
+}
+
+.book_info .intro_txt {
+  background: #f7f9ff;
+  border: 1px solid #e6ecf8;
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+
+.book_tit .fr {
+  color: #5a7cff;
+}
+
+.commentBar,
+.reply_bar {
+  border-radius: 12px;
+}
+
+.comment_list {
+  padding: 18px 12px;
+  border-radius: 10px;
+}
+
+.comment_list:hover {
+  background: #f8faff;
+}
+
+.wrap_inner.author_info,
+#RelateBookOther {
+  border-radius: 12px;
+  border: 1px solid #e8edf6;
+}
+
+.tj_bar li {
+  padding: 4px 0;
+}
+
+.tj_bar li:hover {
+  background: #f8faff;
+}
+
+.tj_bar .book_intro {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.tj_bar .cover {
+  margin-right: 0;
+}
+
+.tj_bar .cover img {
+  width: 64px;
+  height: 82px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.tj_bar .dec {
+  flex: 1;
+  min-width: 0;
+  float: none;
+  width: auto;
+}
+
+.tj_bar .book_intro .book_name {
+  display: block;
+  font-size: 14px;
+  line-height: 1.4;
+  font-weight: 600;
+  color: #24314d;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tj_bar .book_intro .txt {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  height: auto;
+  margin-top: 6px;
+  line-height: 1.5;
+  color: #6d7890;
 }
 </style>

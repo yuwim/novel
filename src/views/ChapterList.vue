@@ -30,8 +30,8 @@
         <div class="dirWrap cf">
           <h3>正文({{chapterList.length}})</h3>
           <div class="dirList">
-            <ul v-for="(item,index) in chapterList" :key="index">
-              <li>
+            <ul>
+              <li v-for="(item,index) in chapterList" :key="index">
                 <a @click="bookContent(book.id,item.id)" href="javascript:void(0)">
                   <span>{{item.chapterName}}</span><i class="red"> [{{item.isVip == 1 ? '收费' : '免费'}}]</i>
                 </a>
@@ -101,3 +101,72 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.channelChapterlist {
+  border-radius: 14px;
+}
+
+.book_info1 .tit h1 {
+  color: #1f2a44;
+}
+
+.book_info1 .list li {
+  color: #5f6b88;
+}
+
+.dirWrap {
+  padding-top: 8px;
+}
+
+.dirWrap h3 {
+  margin-bottom: 10px;
+  border-radius: 10px;
+  background: #f3f7ff;
+  color: #2a3a5e;
+  padding-left: 14px;
+  font-size: 16px;
+}
+
+.dirList ul {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -8px;
+}
+
+.dirList li {
+  float: none;
+  width: calc(50% - 16px);
+  margin: 0 8px;
+  height: auto;
+  line-height: 1.5;
+  padding: 10px 12px;
+  border-bottom: 1px dashed #e2e9f5;
+  transition: background-color 0.2s ease;
+}
+
+.dirList li:hover {
+  background: #f8faff;
+}
+
+.dirList li a {
+  float: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.dirList li span {
+  display: inline-block;
+  max-width: calc(100% - 70px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.dirList li i {
+  vertical-align: middle;
+}
+</style>

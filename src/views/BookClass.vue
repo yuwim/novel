@@ -383,4 +383,52 @@ export default {
 .el-pagination {
   --el-pagination-hover-color: #f80 !important;
 }
+
+.channelWrap.classTable {
+  border-radius: 14px;
+}
+
+.so_tag .list li {
+  margin-bottom: 8px;
+  padding-bottom: 12px;
+  border-bottom: 1px dashed #e9edf5;
+}
+
+.so_tag .list li:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.so_tag a {
+  margin-bottom: 8px;
+  border-radius: 14px;
+  transition: all 0.2s ease;
+}
+
+.so_tag li a.on,
+.so_tag li a:hover {
+  background: #eef2ff;
+  color: #4f6dff;
+}
+
+.channelClassContent .updateTable {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.rankTable table th {
+  background: #f5f8ff;
+}
+
+.rankTable table tr:hover td {
+  background: #f8faff !important;
+}
+
+.el-pagination.is-background .el-pager li:not(.is-disabled).is-active {
+  background-color: #5a7cff !important;
+}
+
+.el-pagination {
+  --el-pagination-hover-color: #5a7cff !important;
+}
 </style>
