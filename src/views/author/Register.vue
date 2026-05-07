@@ -367,4 +367,40 @@ select {
 .tableOnebor td {
     border-right: 0;
 }
+
+#main {
+    border: 1px solid #e6ecf7;
+    border-radius: 16px;
+    box-shadow: 0 12px 28px rgba(30, 52, 102, 0.1);
+    overflow: hidden;
+}
+
+.tableBasic {
+    border: none;
+    background: #fff;
+}
+
+.tableBasic td,
+.tableBasic th {
+    border-color: #e7edf8;
+}
+
+.inpMain {
+    border: 1px solid #d7e1f3;
+    border-radius: 10px;
+    padding: 8px 10px;
+    font-size: 14px;
+}
+
+.inpMain:focus {
+    border-color: #5a7cff;
+    box-shadow: 0 0 0 3px rgba(90, 124, 255, 0.14);
+}
+
+.btn {
+    border-radius: 10px;
+    border: 1px solid #5a7cff;
+    background: linear-gradient(180deg, #6b89ff 0%, #5370f0 100%);
+    padding: 12px 22px;
+}
 </style>

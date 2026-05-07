@@ -136,7 +136,8 @@ export default {
 
 .dirList li {
   float: none;
-  width: calc(50% - 16px);
+  width: calc(33.333% - 16px);
+  box-sizing: border-box;
   margin: 0 8px;
   height: auto;
   line-height: 1.5;

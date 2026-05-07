@@ -194,6 +194,14 @@ export default {
 .el-pagination {
   --el-pagination-hover-color: #f80 !important;
 }
+
+.el-pagination.is-background .el-pager li:not(.is-disabled).is-active {
+  background-color: #5a7cff !important;
+}
+
+.el-pagination {
+  --el-pagination-hover-color: #5a7cff !important;
+}
 </style>
 
 <style scoped>
@@ -775,5 +783,41 @@ a.redBtn:hover {
   border-radius: 6px;
   padding: 10px;
   line-height: 1.8;
+}
+
+.userBox {
+  border: 1px solid #e6ecf7;
+  border-radius: 16px;
+  box-shadow: 0 12px 28px rgba(30, 52, 102, 0.1);
+}
+
+.my_l li .on {
+  border-left: none;
+  background: #edf2ff;
+  color: #4363ec;
+}
+
+.my_bookshelf .title {
+  border-bottom: 1px solid #e7edf8;
+  padding-bottom: 10px;
+}
+
+.redBtn {
+  border-color: #5a7cff;
+  background: linear-gradient(180deg, #6b89ff 0%, #5370f0 100%);
+  border-radius: 10px;
+}
+
+.updateTable table {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.updateTable th {
+  background: #f4f8ff;
+}
+
+.updateTable tr:hover td {
+  background: #f8faff;
 }
 </style>

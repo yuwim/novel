@@ -182,6 +182,14 @@ export default {
 .el-pagination {
   --el-pagination-hover-color: #f80 !important;
 }
+
+.el-pagination.is-background .el-pager li:not(.is-disabled).is-active {
+  background-color: #5a7cff !important;
+}
+
+.el-pagination {
+  --el-pagination-hover-color: #5a7cff !important;
+}
 </style>
 
 <style scoped>
@@ -763,5 +771,38 @@ a.redBtn:hover {
   border-radius: 6px;
   padding: 10px;
   line-height: 1.8;
+}
+
+.userBox {
+  border: 1px solid #e6ecf7;
+  border-radius: 16px;
+  box-shadow: 0 12px 28px rgba(30, 52, 102, 0.1);
+}
+
+.my_l li .on {
+  border-left: none;
+  background: #edf2ff;
+  color: #4363ec;
+}
+
+.user_l h3 {
+  color: #1f2a44;
+  font-weight: 600;
+}
+
+.s_input,
+.textarea {
+  border: 1px solid #d7e1f3;
+  border-radius: 10px;
+}
+
+.s_input:focus,
+.textarea:focus {
+  border-color: #5a7cff;
+  box-shadow: 0 0 0 3px rgba(90, 124, 255, 0.14);
+}
+
+.user_l .btn_red {
+  border-radius: 10px;
 }
 </style>

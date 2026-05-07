@@ -59,9 +59,9 @@
                   <li style="position: relative">
                     <el-upload
                       class="avatar-uploader"
-                      :action="baseUrl + '/front/resource/image'"
+                      action=""
+                      :http-request="uploadCoverHttp"
                       :show-file-list="false"
-                      :on-success="handleAvatarSuccess"
                       :before-upload="beforeAvatarUpload"
                     >
                       <img
@@ -138,11 +138,12 @@
 
 <script>
 import "@/assets/styles/book.css";
-import { reactive, toRefs, onMounted, ref } from "vue";
+import { reactive, toRefs, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { ElMessage } from "element-plus";
 import { publishBook } from "@/api/author";
 import { listCategorys } from "@/api/book";
+import request from "@/utils/request";
 import AuthorHeader from "@/components/author/Header.vue";
 import picUpload from "@/assets/images/pic_upload.png";
 export default {
@@ -165,19 +166,51 @@ export default {
       loadCategoryList()
     })
 
+    /** 后端 ResourceServiceImpl 用 ImageIO 校验，常见可用：JPEG / PNG / GIF（WebP 视 JDK 插件而定） */
     const beforeAvatarUpload = (rawFile) => {
-      if (rawFile.type !== "image/jpeg") {
-        ElMessage.error("必须上传 JPG 格式的图片!");
+      const allowed = ["image/jpeg", "image/png", "image/gif"];
+      if (!allowed.includes(rawFile.type)) {
+        ElMessage.error("请上传 JPG、PNG 或 GIF 图片!");
         return false;
-      } else if (rawFile.size / 1024 / 1024 > 5) {
+      }
+      if (rawFile.size / 1024 / 1024 > 5) {
         ElMessage.error("图片大小最多 5MB!");
         return false;
       }
       return true;
     };
 
-    const handleAvatarSuccess = (response, uploadFile) => {
-      state.book.picUrl = response.data;
+    /** 对齐 back/novel ResourceController：POST /front/resource/image，字段 file，成功时 data 为相对路径字符串 */
+    const uploadCoverHttp = async (options) => {
+      const { file, onSuccess, onError } = options;
+      const formData = new FormData();
+      formData.append("file", file);
+      try {
+        const body = await request.post("/front/resource/image", formData, {
+          transformRequest: [
+            (data, headers) => {
+              if (data instanceof FormData) {
+                delete headers["Content-Type"];
+              }
+              return data;
+            },
+          ],
+        });
+        const raw = body?.data;
+        const url =
+          typeof raw === "string" ? raw.trim().replace(/\\/g, "/") : "";
+        if (url) {
+          state.book.picUrl = url;
+          ElMessage.success("封面上传成功");
+          onSuccess(body);
+        } else {
+          console.warn("上传接口返回 data 非字符串:", body);
+          ElMessage.error("封面上传失败：服务器返回数据异常");
+          onError(new Error("invalid upload response"));
+        }
+      } catch (e) {
+        onError(e);
+      }
     };
 
     const loadCategoryList = async () => {
@@ -219,7 +252,7 @@ export default {
       ...toRefs(state),
       picUpload,
       beforeAvatarUpload,
-      handleAvatarSuccess,
+      uploadCoverHttp,
       loadCategoryList,
       categoryChange,
       saveBook
@@ -237,6 +270,14 @@ export default {
 }
 .el-pagination {
   --el-pagination-hover-color: #f80 !important;
+}
+
+.el-pagination.is-background .el-pager li:not(.is-disabled).is-active {
+  background-color: #5a7cff !important;
+}
+
+.el-pagination {
+  --el-pagination-hover-color: #5a7cff !important;
 }
 </style>
 
@@ -819,5 +860,45 @@ a.redBtn:hover {
   border-radius: 6px;
   padding: 10px;
   line-height: 1.8;
+}
+
+.userBox {
+  border: 1px solid #e6ecf7;
+  border-radius: 16px;
+  box-shadow: 0 12px 28px rgba(30, 52, 102, 0.1);
+}
+
+.my_l li .on {
+  border-left: none;
+  background: #edf2ff;
+  color: #4363ec;
+}
+
+.user_l h3 {
+  color: #1f2a44;
+  font-weight: 600;
+}
+
+.s_input,
+.textarea,
+select {
+  border: 1px solid #d7e1f3;
+  border-radius: 10px;
+}
+
+.s_input:focus,
+.textarea:focus,
+select:focus {
+  border-color: #5a7cff;
+  box-shadow: 0 0 0 3px rgba(90, 124, 255, 0.14);
+}
+
+.avatar-uploader .avatar {
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.user_l .btn_red {
+  border-radius: 10px;
 }
 </style>

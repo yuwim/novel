@@ -33,7 +33,8 @@ export function aiGenerate(action,params) {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         },
-        timeout: 60000
+        // 与后端 AiConfig 读超时对齐；推理模型可能较慢
+        timeout: 620000
       });
 }
 
