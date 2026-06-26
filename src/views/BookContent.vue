@@ -1,4 +1,5 @@
 <template>
+  <div id="readPageRoot" :class="readStyleClass">
   <div class="header">
     <Top />
   </div>
@@ -6,10 +7,7 @@
     <div class="readBody cf">
       <div class="readMain cf">
         <div class="read_menu">
-          <div
-            class="menu_left"
-            style="background-color: rgba(255, 255, 255, 0.45)"
-          >
+          <div class="menu_left">
             <ul>
               <li>
                 <a
@@ -31,18 +29,22 @@
                   ><b>书页</b></a
                 >
               </li>
-              <!--
-              <li class="li_shelf" id="cFavs">
+              
+              <li v-show="!inBookshelf" class="li_shelf" id="cFavs">
                 <a
                   class="ico_shelf"
                   href="javascript:void(0);"
                   title="加入书架"
-                  onclick="javascript:BookDetail.AddFavorites(37,1959973,1);"
+                  @click.prevent="toggleBookshelf"
                   ><b>加书架</b></a
                 >
               </li>
-              <li class="li_shelfed" style="display: none">
-                <a class="ico_shelfed" href="javascript:void(0);" title="已收藏"
+              <li v-show="inBookshelf" class="li_shelfed">
+                <a
+                  class="ico_shelfed"
+                  href="javascript:void(0);"
+                  title="移出书架"
+                  @click.prevent="toggleBookshelf"
                   ><b>已收藏</b></a
                 >
               </li>
@@ -57,11 +59,15 @@
                 >
               </li>
               <li>
-                <a class="ico_setup" href="javascript:void(0);" title="设置"
+                <a
+                  class="ico_setup"
+                  href="javascript:void(0);"
+                  title="设置"
+                  @click="openSetup"
                   ><b>设置</b></a
                 >
               </li>
-              -->
+              
             </ul>
           </div>
           <div class="menu_right" style="position: fixed; bottom: 0">
@@ -88,10 +94,7 @@
         <div class="readWrap">
           <div class="bookNav"></div>
           <div id="readcontent">
-            <div
-              class="textbox cf"
-              style="background-color: rgba(255, 255, 255, 0.45)"
-            >
+            <div class="textbox cf">
               <div class="book_title">
                 <h1 v-if="data.chapterInfo">
                   {{ data.chapterInfo.chapterName }}
@@ -110,10 +113,14 @@
               </div>
 
               <div class="txtwrap">
+                <div v-if="isDelisted" class="delisted-block">
+                  本书已下架，暂无法阅读
+                </div>
                 <div
+                  v-else
                   id="showReading"
                   class="readBox"
-                  style="font-size: 16px; font-family: microsoft yahei;white-space:break-spaces"
+                  :style="readBoxStyle"
                   v-html="data.bookContent"
                 ></div>
               </div>
@@ -121,21 +128,18 @@
           </div>
           <div class="nextPageBox">
             <a
-              style="background-color: rgba(255, 255, 255, 0.45)"
               class="prev"
               href="javascript:void(0)"
               @click="preChapter(data.chapterInfo.bookId)"
               >上一章</a
             >
             <a
-              style="background-color: rgba(255, 255, 255, 0.45)"
               class="dir"
               @click="chapterList(data.chapterInfo.bookId)"
               href="javascript:void(0)"
               >目录</a
             >
             <a
-              style="background-color: rgba(255, 255, 255, 0.45)"
               class="next"
               @click="nextChapter(data.chapterInfo.bookId)"
               href="javascript:void(0)"
@@ -158,11 +162,12 @@
         <ul></ul>
       </div>
     </div>
-    <div class="readPopup setupBox" style="display: none">
+    <div v-show="showSetup" class="maskBox" @click="closeSetup"></div>
+    <div v-show="showSetup" class="readPopup setupBox" @click.stop>
       <a
         class="closePopup"
         href="javascript:void(0);"
-        onclick="javascript:$('.maskBox,.setupBox').hide();"
+        @click="closeSetup"
       ></a>
       <div class="popupTit">
         <h3>设置</h3>
@@ -172,69 +177,69 @@
           <li class="readTheme">
             <em class="tit">阅读主题：</em>
             <a
-              id="setup_color_white"
-              class="white current"
+              class="white"
+              :class="{ current: readTheme === 1 }"
               href="javascript:void(0);"
               title="白色"
-              onclick="javascript:BookDetail.SetBackUpColor(1);"
+              @click.prevent="setTheme(1)"
             ></a
             ><a
-              id="setup_color_green"
               class="green"
+              :class="{ current: readTheme === 2 }"
               href="javascript:void(0);"
               title="绿色"
-              onclick="javascript:BookDetail.SetBackUpColor(2);"
+              @click.prevent="setTheme(2)"
             ></a
             ><a
-              id="setup_color_pink"
               class="pink"
+              :class="{ current: readTheme === 3 }"
               href="javascript:void(0);"
               title="粉色"
-              onclick="javascript:BookDetail.SetBackUpColor(3);"
+              @click.prevent="setTheme(3)"
             ></a
             ><a
-              id="setup_color_yellow"
               class="yellow"
+              :class="{ current: readTheme === 4 }"
               href="javascript:void(0);"
               title="黄色"
-              onclick="javascript:BookDetail.SetBackUpColor(4);"
+              @click.prevent="setTheme(4)"
             ></a
             ><a
-              id="setup_color_gray"
               class="gray"
+              :class="{ current: readTheme === 5 }"
               href="javascript:void(0);"
               title="灰色"
-              onclick="javascript:BookDetail.SetBackUpColor(5);"
+              @click.prevent="setTheme(5)"
             ></a
             ><a
-              id="setup_color_night"
               class="night"
+              :class="{ current: readTheme === 6 }"
               href="javascript:void(0);"
               title="夜间"
-              onclick="javascript:BookDetail.SetBackUpColor(6);"
+              @click.prevent="setTheme(6)"
             ></a>
           </li>
           <li class="setFont setBtn">
             <em class="tit">正文字体：</em>
             <a
-              id="setup_font_yahei"
-              class="setYahei current"
+              class="setYahei"
+              :class="{ act: fontFamily === 0 }"
               href="javascript:void(0);"
-              onclick="javascript:BookDetail.SetReadFontFamily(0);"
+              @click.prevent="setFontFamily(0)"
               >雅黑</a
             >
             <a
-              id="setup_font_simsun"
               class="setSimsun"
+              :class="{ act: fontFamily === 1 }"
               href="javascript:void(0);"
-              onclick="javascript:BookDetail.SetReadFontFamily(1);"
+              @click.prevent="setFontFamily(1)"
               >宋体</a
             >
             <a
-              id="setup_font_ks"
               class="setKs"
+              :class="{ act: fontFamily === 2 }"
               href="javascript:void(0);"
-              onclick="javascript:BookDetail.SetReadFontFamily(2);"
+              @click.prevent="setFontFamily(2)"
               >楷书</a
             >
           </li>
@@ -243,13 +248,13 @@
             <a
               class="small"
               href="javascript:void(0);"
-              onclick="javascript:BookDetail.SetReadFont(-2);"
+              @click.prevent="changeFontSize(-2)"
               >A-</a
-            ><span class="current_font" id="cFonts"> 16</span
+            ><span class="current_font">{{ fontSize }}</span
             ><a
               class="big"
               href="javascript:void(0);"
-              onclick="javascript:BookDetail.SetReadFont(2);"
+              @click.prevent="changeFontSize(2)"
               >A+</a
             >
           </li>
@@ -257,17 +262,73 @@
       </div>
     </div>
   </div>
+  </div>
 </template>
 
 <script>
 import "@/assets/styles/book.css";
 import "@/assets/styles/read.css";
-import { reactive, toRefs, onMounted, onBeforeUnmount, onUnmounted } from "vue";
+import {
+  reactive,
+  toRefs,
+  computed,
+  onMounted,
+  onBeforeUnmount,
+  watch,
+} from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { getBookContent, getPreChapterId, getNextChapterId } from "@/api/book";
+import {
+  getBookshelfStatus,
+  addBookshelf,
+  removeBookshelf,
+  updateBookshelfReadProgress,
+} from "@/api/user";
+import { getToken } from "@/utils/auth";
 import { ElMessage } from "element-plus";
 import Top from "@/components/common/Top";
 import Footer from "@/components/common/Footer";
+
+const READ_SETTINGS_KEY = "novel_read_settings";
+const FONT_FAMILIES = [
+  '"Microsoft YaHei", "microsoft yahei", sans-serif',
+  "SimSun, serif",
+  'KaiTi, "kaiti", serif',
+];
+const MIN_FONT_SIZE = 12;
+const MAX_FONT_SIZE = 32;
+const THEME_CLASS_NAMES = Array.from(
+  { length: 6 },
+  (_, i) => `read_style_${i + 1}`
+);
+
+function loadReadSettings() {
+  try {
+    const raw = localStorage.getItem(READ_SETTINGS_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    const theme = Number(parsed.theme);
+    const fontFamily = Number(parsed.fontFamily);
+    const fontSize = Number(parsed.fontSize);
+    return {
+      theme:
+        theme >= 1 && theme <= 6 ? theme : 1,
+      fontFamily:
+        fontFamily >= 0 && fontFamily <= 2 ? fontFamily : 0,
+      fontSize:
+        fontSize >= MIN_FONT_SIZE && fontSize <= MAX_FONT_SIZE
+          ? fontSize
+          : 16,
+    };
+  } catch {
+    return null;
+  }
+}
+
+function saveReadSettings(settings) {
+  localStorage.setItem(READ_SETTINGS_KEY, JSON.stringify(settings));
+}
+
 export default {
   name: "bookContent",
   components: {
@@ -277,35 +338,93 @@ export default {
   setup() {
     const route = useRoute();
     const router = useRouter();
+    const saved = loadReadSettings();
     const state = reactive({
       data: {},
       imgBaseUrl: process.env.VUE_APP_BASE_IMG_URL,
+      showSetup: false,
+      inBookshelf: false,
+      readTheme: saved?.theme ?? 1,
+      fontFamily: saved?.fontFamily ?? 0,
+      fontSize: saved?.fontSize ?? 16,
     });
+
+    const isDelisted = computed(() => +state.data?.bookInfo?.bookStatus === 2);
+
+    const readStyleClass = computed(
+      () => `read_style_${state.readTheme}`
+    );
+
+    const readBoxStyle = computed(() => ({
+      fontSize: `${state.fontSize}px`,
+      fontFamily: FONT_FAMILIES[state.fontFamily],
+      whiteSpace: "break-spaces",
+    }));
+
+    const persistReadSettings = () => {
+      saveReadSettings({
+        theme: state.readTheme,
+        fontFamily: state.fontFamily,
+        fontSize: state.fontSize,
+      });
+    };
+
+    const syncBodyThemeClass = () => {
+      THEME_CLASS_NAMES.forEach((cls) =>
+        document.body.classList.remove(cls)
+      );
+      document.body.classList.add(`read_style_${state.readTheme}`);
+    };
+
+    const setTheme = (theme) => {
+      if (theme < 1 || theme > 6) return;
+      state.readTheme = theme;
+      persistReadSettings();
+    };
+
+    const setFontFamily = (index) => {
+      if (index < 0 || index > 2) return;
+      state.fontFamily = index;
+      persistReadSettings();
+    };
+
+    const changeFontSize = (delta) => {
+      const next = state.fontSize + delta;
+      if (next < MIN_FONT_SIZE || next > MAX_FONT_SIZE) {
+        ElMessage.warning(
+          `字号范围 ${MIN_FONT_SIZE}px ~ ${MAX_FONT_SIZE}px`
+        );
+        return;
+      }
+      state.fontSize = next;
+      persistReadSettings();
+    };
+
+    watch(
+      () => state.readTheme,
+      () => syncBodyThemeClass(),
+      { immediate: true }
+    );
+
     onMounted(() => {
       init(route.params.chapterId);
-      console.log("route.params.chapterId:", route.params.chapterId);
       keyDown();
     });
 
-    onBeforeUnmount(async () => {
-      console.log("onBeforeUnmount............");
-
-      document.onkeydown = (e) => {
-        //事件对象兼容
-        let e1 =
-          e || event || window.event || arguments.callee.caller.arguments[0];
-        //键盘按键判断:左箭头-37;上箭头-38；右箭头-39;下箭头-40
-        const bookId = state.data.chapterInfo.bookId;
-        //左
-        if (e1 && e1.keyCode == 37) {
-          // 按下左箭头
-          return;
-        } else if (e1 && e1.keyCode == 39) {
-          // 按下右箭头
-          return;
-        }
-      };
+    onBeforeUnmount(() => {
+      THEME_CLASS_NAMES.forEach((cls) =>
+        document.body.classList.remove(cls)
+      );
+      document.onkeydown = null;
     });
+
+    const openSetup = () => {
+      state.showSetup = true;
+    };
+
+    const closeSetup = () => {
+      state.showSetup = false;
+    };
 
     const bookDetail = (bookId) => {
       router.push({ path: `/book/${bookId}` });
@@ -335,9 +454,53 @@ export default {
       }
     };
 
+    const loadBookshelfStatus = async (bookId) => {
+      if (!getToken() || !bookId) {
+        state.inBookshelf = false;
+        return;
+      }
+      try {
+        const { data } = await getBookshelfStatus(bookId);
+        state.inBookshelf = data === true || data === 1 || data === "1";
+      } catch {
+        state.inBookshelf = false;
+      }
+    };
+
+    const toggleBookshelf = async () => {
+      if (!getToken()) {
+        ElMessage.warning("请先登录");
+        router.push({ name: "login" });
+        return;
+      }
+      const bookId = state.data.chapterInfo?.bookId;
+      if (!bookId) {
+        return;
+      }
+      try {
+        if (state.inBookshelf) {
+          await removeBookshelf(bookId);
+          state.inBookshelf = false;
+          ElMessage.success("已移出书架");
+        } else {
+          await addBookshelf(bookId);
+          state.inBookshelf = true;
+          ElMessage.success("已加入书架");
+        }
+      } catch {
+        /* 错误由请求拦截器提示 */
+      }
+    };
+
     const init = async (chapterId) => {
       const { data } = await getBookContent(chapterId);
       state.data = data;
+      if (data?.chapterInfo?.bookId) {
+        await loadBookshelfStatus(data.chapterInfo.bookId);
+        if (getToken()) {
+          updateBookshelfReadProgress(data.chapterInfo.bookId, chapterId);
+        }
+      }
     };
 
     // 监听键盘
@@ -361,10 +524,19 @@ export default {
 
     return {
       ...toRefs(state),
+      isDelisted,
+      readStyleClass,
+      readBoxStyle,
+      openSetup,
+      closeSetup,
+      setTheme,
+      setFontFamily,
+      changeFontSize,
       bookDetail,
       chapterList,
       preChapter,
       nextChapter,
+      toggleBookshelf,
     };
   },
   mounted() {},
@@ -373,6 +545,9 @@ export default {
 
 <style scoped>
 @charset "utf-8";
+#readPageRoot {
+  min-height: 100vh;
+}
 a {
   color: #333;
 }
@@ -703,6 +878,14 @@ body,
   padding: 10px 0 60px; /*min-height: 469px;*/
   word-wrap: break-word;
   word-break: break-word;
+}
+.delisted-block {
+  width: 90%;
+  margin: 0 auto;
+  padding: 120px 0;
+  text-align: center;
+  font-size: 18px;
+  color: #999;
 }
 .readBox p {
   line-height: 2;

@@ -4,10 +4,12 @@
     <div class="userBox cf">
       <div class="my_l">
         <ul class="log_list">
-          <li>            <router-link class="link_4 on" :to="{'name':'authorBookList'}">小说管理</router-link>
-</li>
-          <!--<li><a class="link_1 " href="/user/userinfo.html">批量小说爬取</a></li>
-<li><a class="link_4 " href="/user/favorites.html">单本小说爬取</a></li>-->
+          <li>
+            <router-link class="link_4 on" :to="{'name':'authorBookList'}">小说管理</router-link>
+          </li>
+          <li>
+            <router-link class="link_4" :to="{'name':'authorAuditFeedback'}">审核反馈</router-link>
+          </li>
         </ul>
       </div>
       <div class="my_r">
@@ -231,7 +233,6 @@ export default {
     }
 
     const saveBook = async () => {
-      console.log("sate=========",state.book)
       if (!state.book.bookName) {
         ElMessage.error("书名不能为空！");
         return;
@@ -244,8 +245,13 @@ export default {
         ElMessage.error("简介不能为空！");
         return;
       }
-      await publishBook(state.book)
-      router.push({'name':'authorBookList'})
+      try {
+        await publishBook(state.book);
+        ElMessage.success("作品已提交审核，请等待管理员审核通过");
+        router.push({ name: "authorBookList" });
+      } catch {
+        /* 错误已由拦截器提示 */
+      }
     }
 
     return {

@@ -38,6 +38,22 @@ export function aiGenerate(action,params) {
       });
 }
 
+export function listBookAudits(params) {
+    return request.get('/author/audit/books', { params });
+}
+
+export function getBookAuditDetail(id) {
+    return request.get(`/author/audit/book/${id}`);
+}
+
+export function listChapterAudits(params) {
+    return request.get('/author/audit/chapters', { params });
+}
+
+export function getChapterAuditDetail(id) {
+    return request.get(`/author/audit/chapter/${id}`);
+}
+
 export function deleteChapter(id) {
     return request.delete(`/author/book/chapter/${id}`);
 }

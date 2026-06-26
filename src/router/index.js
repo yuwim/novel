@@ -68,10 +68,20 @@ const router = createRouter({
       component: () => import('@/views/UserSetup')
     },
     {
+      path: '/user/topup',
+      name: 'userTopup',
+      component: () => import('@/views/UserTopup')
+    },
+    {
       path: '/user/comment',
       name: 'userComment',
       component: () => import('@/views/UserComment')
 	   
+    },
+    {
+      path: '/user/bookshelf',
+      name: 'userBookshelf',
+      component: () => import('@/views/UserBookshelf')
     },
     {
       path: '/author/register',
@@ -102,6 +112,42 @@ const router = createRouter({
       path: '/author/chapter_update',
       name: 'authorChapterUpdate',
       component: () => import('@/views/author/ChapterUpdate')
+    },
+    {
+      path: '/author/audit_feedback',
+      name: 'authorAuditFeedback',
+      component: () => import('@/views/author/AuditFeedback')
+    },
+    {
+      path: '/admin',
+      component: () => import('@/views/admin/Layout'),
+      children: [
+        {
+          path: '',
+          name: 'adminDashboard',
+          component: () => import('@/views/admin/Dashboard')
+        },
+        {
+          path: 'book_manage',
+          name: 'adminBookManage',
+          component: () => import('@/views/admin/BookManage')
+        },
+        {
+          path: 'book_audit',
+          name: 'adminBookAudit',
+          component: () => import('@/views/admin/BookAudit')
+        },
+        {
+          path: 'console',
+          name: 'adminConsole',
+          component: () => import('@/views/admin/Console')
+        },
+        {
+          path: 'comment_manage',
+          name: 'adminCommentManage',
+          component: () => import('@/views/admin/CommentManage')
+        }
+      ]
     }
   ]
 })

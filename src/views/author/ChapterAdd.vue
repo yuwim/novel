@@ -9,8 +9,11 @@
               >小说管理</router-link
             >
           </li>
-          <!--<li><a class="link_1 " href="/user/userinfo.html">批量小说爬取</a></li>
-<li><a class="link_4 " href="/user/favorites.html">单本小说爬取</a></li>-->
+          <li>
+            <router-link class="link_4" :to="{ name: 'authorAuditFeedback' }"
+              >审核反馈</router-link
+            >
+          </li>
         </ul>
       </div>
       <div class="my_r">
@@ -333,7 +336,6 @@ export default {
     };
 
     const saveChapter = async () => {
-      console.log("sate=========", state.chapter);
       if (!state.chapter.chapterName) {
         ElMessage.error("章节名不能为空！");
         return;
@@ -342,14 +344,17 @@ export default {
         ElMessage.error("章节内容不能为空！");
         return;
       }
-
       if (state.chapter.chapterContent.length < 50) {
         ElMessage.error("章节内容太少！");
         return;
       }
-
-      await publishChapter(state.bookId, state.chapter);
-      router.push({ name: "authorChapterList", query: { id: state.bookId } });
+      try {
+        await publishChapter(state.bookId, state.chapter);
+        ElMessage.success("章节已提交审核，请等待管理员审核通过");
+        router.push({ name: "authorChapterList", query: { id: state.bookId } });
+      } catch {
+        /* 错误已由拦截器提示 */
+      }
     };
 
     return {

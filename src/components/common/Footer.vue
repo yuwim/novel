@@ -5,7 +5,7 @@
         <ul>
           
           <li>
-            Copyright (C) xxyopen.com All rights
+            Copyright (C) xxxxxx.com All rights
             reserved&nbsp;&nbsp;书旗小说版权所有
           </li>
         </ul>

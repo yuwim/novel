@@ -7,6 +7,20 @@
         >
       </li>
       <li>
+        <router-link
+          :class="`${routeName == 'userTopup' ? 'link_9 on' : 'link_9'}`"
+          :to="{ name: 'userTopup' }"
+          >充值</router-link
+        >
+      </li>
+      <li>
+        <router-link
+          :class="`${routeName == 'userBookshelf' ? 'link_7 on' : 'link_7'}`"
+          :to="{ name: 'userBookshelf' }"
+          >我的书架</router-link
+        >
+      </li>
+      <li>
         <router-link :class="`${routeName == 'userComment' ? 'link_6 on' : 'link_6'}`" :to="{ name: 'userComment' }"
           >我的评论</router-link
         >
@@ -16,14 +30,15 @@
 </template>
 
 <script>
+import { computed } from "vue";
 import { useRoute } from "vue-router";
 export default {
   name: "UserMenu",
   setup() {
     const route = useRoute();
-    const routeName = route.name;
-    return {routeName}
-  }
+    const routeName = computed(() => route.name);
+    return { routeName };
+  },
 };
 </script>
 
@@ -273,6 +288,9 @@ export default {
 }
 .my_l .link_8 {
   background-position: 32px -481px;
+}
+.my_l .link_9 {
+  background-position: 32px -522px;
 }
 .my_r {
   width: 739px;

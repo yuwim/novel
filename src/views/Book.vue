@@ -3,10 +3,12 @@
   <div class="main box_center cf mb50">
     <div class="channelWrap channelBookInfo cf">
       <div class="bookCover cf">
-        <a class="book_cover">
+        <a class="book_cover" :class="{ delisted: +book.bookStatus === 2 }">
+          <span v-if="+book.bookStatus === 2" class="delisted-overlay">已下架</span>
           <img
             id="bookCover"
             class="cover"
+            :class="{ 'cover-delisted': +book.bookStatus === 2 }"
             :src="`${imgBaseUrl}` + `${book.picUrl}`"
             :alt="book.bookName"
         /></a>
@@ -24,7 +26,7 @@
               >
               <span class="item"
                 >状态：<em>{{
-                  book.bookStatus == 0 ? "连载中" : "已完结"
+                  +book.bookStatus === 2 ? "已下架" : (+book.bookStatus === 1 ? "已完结" : "连载中")
                 }}</em></span
               >
               <span class="item"
@@ -46,20 +48,21 @@
           </div>
           <div class="btns" id="optBtn">
             <a
+              v-if="+book.bookStatus !== 2"
               href="javascript:void(0)"
               @click="bookContent(book.id, book.firstChapterId)"
               class="btn_ora"
               >点击阅读</a
             >
-            <!--
-            <span id="cFavs"
+            <span v-if="+book.bookStatus === 2" class="delisted-notice">本书已下架，暂无法阅读</span>
+            <span v-if="+book.bookStatus !== 2" id="cFavs"
               ><a
                 href="javascript:void(0);"
                 class="btn_ora_white btn_addsj"
-                onclick="javascript:BookDetail.AddFavorites(37,0,0);"
-                >加入书架</a
+                @click.prevent="toggleBookshelf"
+                >{{ inBookshelf ? "已加书架" : "加入书架" }}</a
               >
-            </span>-->
+            </span>
           </div>
         </div>
       </div>
@@ -340,8 +343,15 @@ import {
   listRecBooks,
   listNewestComments,
 } from "@/api/book";
-import { comment, deleteComment, updateComment } from "@/api/user";
-import { getUid } from "@/utils/auth";
+import {
+  comment,
+  deleteComment,
+  updateComment,
+  getBookshelfStatus,
+  addBookshelf,
+  removeBookshelf,
+} from "@/api/user";
+import { getToken, getUid } from "@/utils/auth";
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
 import author_head from "@/assets/images/author_head.png";
@@ -368,6 +378,7 @@ export default {
       dialogUpdateCommentFormVisible: false,
       commentId: "",
       updateComment: "",
+      inBookshelf: false,
     });
     onMounted(() => {
       const bookId = route.params.id;
@@ -386,6 +397,44 @@ export default {
       }
     });
 
+    const loadBookshelfStatus = async (bookId) => {
+      if (!getToken() || !bookId) {
+        state.inBookshelf = false;
+        return;
+      }
+      try {
+        const { data } = await getBookshelfStatus(bookId);
+        state.inBookshelf = data === true || data === 1 || data === "1";
+      } catch {
+        state.inBookshelf = false;
+      }
+    };
+
+    const toggleBookshelf = async () => {
+      if (!getToken()) {
+        ElMessage.warning("请先登录");
+        router.push({ name: "login" });
+        return;
+      }
+      const bookId = state.book.id;
+      if (!bookId) {
+        return;
+      }
+      try {
+        if (state.inBookshelf) {
+          await removeBookshelf(bookId);
+          state.inBookshelf = false;
+          ElMessage.success("已移出书架");
+        } else {
+          await addBookshelf(bookId);
+          state.inBookshelf = true;
+          ElMessage.success("已加入书架");
+        }
+      } catch {
+        /* 错误由请求拦截器提示 */
+      }
+    };
+
     const loadBook = async (bookId) => {
       const { data } = await getBookById(bookId);
       state.book = data;
@@ -393,6 +442,7 @@ export default {
         .getElementById("bookCover")
         .setAttribute("onerror", "this.src='default.gif';this.onerror=null");
       addBookVisit(bookId);
+      await loadBookshelfStatus(bookId);
     };
 
     const loadRecBooks = async (bookId) => {
@@ -481,6 +531,7 @@ export default {
       man,
       updateUserComment,
       goUpdateComment,
+      toggleBookshelf,
     };
   },
   mounted() {
@@ -632,5 +683,38 @@ export default {
   margin-top: 6px;
   line-height: 1.5;
   color: #6d7890;
+}
+
+.book_cover.delisted {
+  position: relative;
+  cursor: default;
+}
+.delisted-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  z-index: 1;
+  border-radius: 4px;
+  pointer-events: none;
+}
+.cover-delisted {
+  opacity: 0.4;
+}
+.delisted-notice {
+  display: inline-flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 20px;
+  color: #999;
+  font-size: 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
 }
 </style>

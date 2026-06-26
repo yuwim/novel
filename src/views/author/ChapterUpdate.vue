@@ -9,8 +9,11 @@
               >小说管理</router-link
             >
           </li>
-          <!--<li><a class="link_1 " href="/user/userinfo.html">批量小说爬取</a></li>
-<li><a class="link_4 " href="/user/favorites.html">单本小说爬取</a></li>-->
+          <li>
+            <router-link class="link_4" :to="{ name: 'authorAuditFeedback' }"
+              >审核反馈</router-link
+            >
+          </li>
         </ul>
       </div>
       <div class="my_r">

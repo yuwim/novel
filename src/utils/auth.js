@@ -1,10 +1,11 @@
 
 const TokenKey = 'Authorization'
-
 const nickNameKey = 'nickName'
-
 const uidKey = 'uid'
 
+const AdminTokenKey = 'AdminAuthorization'
+const AdminNickNameKey = 'adminNickName'
+const AdminUidKey = 'adminUid'
 
 export const getToken = () => {
     return localStorage.getItem(TokenKey);
@@ -40,5 +41,41 @@ export const getUid = () => {
 
 export const removeUid = () =>  {
   return localStorage.removeItem(uidKey)
+}
+
+export const getAdminToken = () => {
+    return localStorage.getItem(AdminTokenKey);
+}
+
+export const setAdminToken = (token) => {
+  return localStorage.setItem(AdminTokenKey, token)
+}
+
+export const removeAdminToken = () => {
+  return localStorage.removeItem(AdminTokenKey)
+}
+
+export const setAdminNickName = (nickName) => {
+  return localStorage.setItem(AdminNickNameKey, nickName)
+}
+
+export const getAdminNickName = () => {
+  return localStorage.getItem(AdminNickNameKey);
+}
+
+export const removeAdminNickName = () => {
+  return localStorage.removeItem(AdminNickNameKey)
+}
+
+export const setAdminUid = (uid) => {
+  return localStorage.setItem(AdminUidKey, uid)
+}
+
+export const getAdminUid = () => {
+  return localStorage.getItem(AdminUidKey);
+}
+
+export const removeAdminUid = () => {
+  return localStorage.removeItem(AdminUidKey)
 }
 
